@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>HOME PAGE</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	
+	<div class="row">
+
+	<div class="col-md-2 border-right">
+		<div style="margin-top:50px;">
+			<th:block th:if="${filtro != null}">
+			<TEXT style="margin-left:25px;">FILTRATO PER: </TEXT>
+			<BR>
+			<span th:if="${filtro.getLingua() != '%'}" th:text="|Lingua:${filtro.getLingua()}|" style="margin-left:25px;"></span>
+			<br>
+			<span th:if="${filtro.getRarita() != '%'}" th:text="|Rarita:${filtro.getRarita()}|" style="margin-left:25px;"></span>
+			</th:block>
+			<br>		
+		</div>
+		<hr>
+		<div style="margin-top:50px;">
+				<text style="margin-left:30px;">FILTRI:</text>
+				<BR>
+				<form method="post" action="/aggiungifiltro">
+				<select class="form-control col-md-6" style="margin-left:25px;" id="lingua" name="lingua">
+					<option value="" disabled selected>Lingua</option>
+					<option value="ITA">ITA</option>
+					<option value="ENG">ENG</option>
+				</select>
+				<BR>
+			   <select class="form-control col-md-6" style="margin-left:25px;" id="rarita" name="rarita">
+					<option value="" disabled selected>Rarità</option>
+					<option value="rare holo">RaraHolo</option>
+					<option value="rare">Rara</option>
+					<option value="uncommon">NonComune</option>
+					<option value="common">Comune</option>
+					<option value="%">Elimina Filtro</option>
+				</select>
+				<br>
+				<input type="hidden" id="set" name="set" th:value="${nomeSet}">
+				<button type="submit" class="btn btn-info" style="margin-left:50px;">Filtra</button>
+				</form>
+				</div>
+	</div>
+
+	<div class="col-md-1">
+		</div>
+		<div class="col-md-5">
+				<table>
+					<thblock th:each="carta,i : ${listaSet}">
+						<thblock th:if="${i.count == 0 or i.count%4==1}">
+							<tr>
+						</thblock>	
+							<td>
+								<form method="post" action="#">
+									<center><img class="center" style="margin-top:20px; margin-left:10px;" th:src="@{|/${nomeSet}/${carta.id.substring(2,5)}.jpg|}" >
+									<thblock th:text="${carta.getNome()}"/></center>
+									<center><select class="form-control col-md-8" id="cond" name="cond">
+									  <option value="" disabled selected>Condizioni</option>
+									  <option value="1">Mint</option>
+									  <option value="2">Exc</option>
+									  <option value="3">Good</option>
+									</select></center>
+									 <input type="hidden" id="idCarta" name="idCarta" th:value="${carta.id}">
+									 <input type="hidden" id="nomeCarta" name="nomeCarta" th:value="${carta.nome}">
+									<center><button type="submit" class="btn btn-info">Aggiungi</button></center>
+					    			<!--  <thblock th:text="${carta.getNome()}"/>-->
+					    		</form>
+					    	</td>
+				    	<thblock th:if="${i.count%4==0 and i.count!=1}">
+							</tr>
+						</thblock>
+					</thblock>
+				</table>
+			</div>
+			
+		<div class="col-md-1 ">
+		</div>
+			<div class="col-md-2 border-left" >
+			<table style="margin-top:15px;" class="table">
+				<tr>
+					<th colspan="6">
+					Stai per aggiungere:
+					</th>
+				</tr>
+				<thblock th:each="cards,i : ${listaCarte}">
+				<tr>
+					<td>
+						<span th:text="${cards.getIdCarta().substring(2,5)}"></span>
+					</td>
+					<td>
+						<span th:text="${cards.getLingua()}"></span>
+					</td>
+					<td>
+						<span th:text="${cards.getNomeCarta()}"></span>
+					</td>
+
+					<td>
+						<span th:text="${cards.getNomeCondizione()}"></span>
+					</td>
+					<td>
+						<span th:text="${cards.getQta()}"></span>
+					</td>
+					<td>
+						<form method="post" action="/eliminaDallaLista">
+						<input type="hidden" id="i" name="i" th:value="${i.index}">
+						<input type="hidden" id="set2" name="set2" th:value="${nomeSet}">
+						<button type="submit" class="btn btn-info" style="margin-left:50px;">X</button>
+						</form>
+					</td>
+				</tr>
+				</thblock>
+			</table>
+			<form method="post" action="/addDB">
+			<button type="submit" class="btn btn-info">Aggiungi</button>
+		</div>
+		
+	</div></div>
+
+	
+</body>
+</html>
+
+
